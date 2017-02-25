@@ -9,6 +9,7 @@ const int relayPin = 8; //set the relay pin
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);  //set the LCD pins
 
 int Contrast=10;
+String Degree = "C"; // "C"- celsius, "F"- fahrenheit
 float TempSet;
 String Status;
 bool Power;
@@ -20,7 +21,11 @@ float Thermistor(int RawADC) {
   float Temp;
   Temp = log(10000.0*((1024.0/RawADC-1))); 
   Temp = 1 / (0.001129148 + (0.000234125 + (0.0000000876741 * Temp * Temp ))* Temp );
-  Temp = Temp - 273.15;            // Convert Kelvin to Celcius
+  if (Degree == "C"){
+    Temp = Temp - 273.15;            // Convert Kelvin to Celcius
+  }else if (Degree == "F"){
+    Temp = (Temp * 9.0)/ 5.0 + 32.0;
+  }
   return Temp;
 }
 
@@ -94,7 +99,7 @@ void setup()
     val = EEPROM.read(PowerEeprom);
     if (val == 0xFF){
       Power = false;
-      TempSet = -30.00;
+      TempSet = -40.00;
       EEPROM.put(PowerEeprom, Power);
       EEPROM.put(TempEeprom, TempSet);
     } else {
@@ -111,7 +116,7 @@ void loop()
   float temp =  GetTemp();
   
   lcd.setCursor(0, 0);
-  lcd.print(String("Temp: " + String(temp) + " C")); //print on the LCD current temperature
+  lcd.print(String("Temp: " + String(temp) + Degree)); //print on the LCD current temperature
   if (Power){
     if (temp < TempSet){
       digitalWrite(relayPin, LOW);
