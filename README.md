@@ -3,7 +3,7 @@ This is my first project for Internet Of Things.
 
 Currently it is working and I have plans to add new functional, remote and local controls, and add new sensors. 
 
-On the end I want to do a module system for different use cases.
+Finally I want to do a module system for different use cases.
 
 ![Project](Thermostat.png)
 
